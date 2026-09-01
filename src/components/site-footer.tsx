@@ -37,9 +37,11 @@ export function SiteFooter({ landing }: { landing: Landing }) {
             </Link>
           </div>
 
-          <p>
-            © {new Date().getFullYear()} {agency.name}
-          </p>
+          {!landing.generic && (
+            <p>
+              © {new Date().getFullYear()} {agency.name}
+            </p>
+          )}
         </div>
       </div>
     </div>
