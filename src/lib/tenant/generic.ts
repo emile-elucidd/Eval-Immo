@@ -19,8 +19,14 @@ import type { Landing } from "@/lib/tenant/types";
  * way it builds `/boulogne-billancourt/estimation` for a client.
  */
 
-/** Leads from this page belong to nobody, so this name is the operator's own brand. */
-const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME?.trim() || "Estimation Immobilière";
+/**
+ * The operator's own brand, shown where a client's landing shows the agency
+ * name — the navbar mark, the footer, the page-title suffix. Left unset it
+ * stays empty: the apex is not a named business, and inventing one ("Estimation
+ * Immobilière") only makes the page read as a front for an agency that does not
+ * exist. Those spots then render nothing rather than a placeholder brand.
+ */
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME?.trim() || "";
 
 /** Swap for a neutral, recognisably-French cover: no skyline that names a city. */
 const COVER = process.env.NEXT_PUBLIC_GENERIC_COVER?.trim() || "/hero-cover.jpg";

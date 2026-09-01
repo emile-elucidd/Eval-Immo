@@ -11,21 +11,23 @@ export function SiteFooter({ landing }: { landing: Landing }) {
   return (
     <div>
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-12">
-        <Link href={href("/")} className="flex h-10 w-32 items-center" aria-label="Accueil">
-          {agency.logo ? (
-            <TenantImage
-              src={agency.logo}
-              alt={agency.name}
-              height={40}
-              width={128}
-              className="h-full w-auto object-contain object-left"
-            />
-          ) : (
-            <span className="text-base font-black tracking-tight text-foreground">
-              {agency.name}
-            </span>
-          )}
-        </Link>
+        {(agency.logo || agency.name) && (
+          <Link href={href("/")} className="flex h-10 w-32 items-center" aria-label="Accueil">
+            {agency.logo ? (
+              <TenantImage
+                src={agency.logo}
+                alt={agency.name}
+                height={40}
+                width={128}
+                className="h-full w-auto object-contain object-left"
+              />
+            ) : (
+              <span className="text-base font-black tracking-tight text-foreground">
+                {agency.name}
+              </span>
+            )}
+          </Link>
+        )}
 
         <div className="flex flex-col items-center gap-4 text-sm text-muted-foreground md:flex-row md:justify-between">
           <div className="flex items-center gap-6">

@@ -14,11 +14,14 @@ const SCROLL_THRESHOLD = 24;
 /**
  * The agency's mark. A logo when the registry has one, the agency name
  * otherwise — a blank slot reads as a broken page on a landing that is
- * supposed to belong to a named business.
+ * supposed to belong to a named business. The apex landing has no business
+ * behind it, so with neither logo nor name it shows nothing at all.
  */
 function Logo({ className, inverted }: { className?: string; inverted?: boolean }) {
   const { agency } = useLanding();
   const href = useLandingHref();
+
+  if (!agency.logo && !agency.name) return null;
 
   return (
     <Link href={href("/")} className={cn("flex items-center", className)} aria-label="Accueil">
@@ -66,7 +69,7 @@ export function Navbar() {
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-5">
         <Logo className="h-10 w-32" inverted={!scrolled} />
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 [&:only-child]:ml-auto">
           <ButtonLink
             href={href("/rendez-vous")}
             id="navbar-appointment-cta"

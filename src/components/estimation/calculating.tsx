@@ -40,7 +40,9 @@ export function Calculating({ onDone }: { onDone: () => void }) {
   return (
     <div className="flex w-full flex-col items-center gap-8">
       <h1 className="text-center text-2xl leading-tight font-black tracking-tight text-balance text-foreground sm:text-3xl">
-        {finished ? "Calcul terminé" : `${agency.name} calcule votre estimation…`}
+        {finished
+          ? "Calcul terminé"
+          : `${agency.name || "Notre moteur"} calcule votre estimation…`}
       </h1>
 
       <ul className="flex w-full flex-col">

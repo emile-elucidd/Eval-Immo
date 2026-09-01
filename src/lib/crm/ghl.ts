@@ -77,7 +77,7 @@ export function leadFields(lead: Lead, landingUrl?: string): Record<LeadField, s
 /** What a salesperson wants to read at the top of the contact record. */
 function note(fields: Record<LeadField, string>, agency: Agency): string {
   const lines = [
-    `Estimation en ligne — ${agency.name}`,
+    agency.name ? `Estimation en ligne — ${agency.name}` : "Estimation en ligne",
     "",
     `Adresse : ${fields.address}`,
     `Type : ${fields.propertyType} · ${fields.surface} · ${fields.condition}`,

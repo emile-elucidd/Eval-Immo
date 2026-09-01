@@ -752,7 +752,8 @@ export function Funnel({
             <a href={href("/privacy")} className="underline underline-offset-2">
               politique de confidentialité
             </a>
-            . Vous acceptez que {agency.name} vous appelle pour affiner cette estimation avec vous,
+            . Vous acceptez que {agency.name || "notre équipe"} vous appelle pour affiner cette
+            estimation avec vous,
             assure par courriel ou par texto le suivi de votre demande, vous conseille sur votre
             projet et vous informe de l&apos;évolution du marché.
           </p>
@@ -787,6 +788,8 @@ function Shell({
   const { agency } = useLanding();
   const agencyName = agency.name;
   const homeHref = useLandingHref()("/");
+  // The apex funnel has no brand to show in the header bar.
+  const hasMark = Boolean(agencyName);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -800,7 +803,9 @@ function Shell({
         {/* The only way out of the funnel — everything else is the question at hand. */}
         <div className="mx-auto flex w-full max-w-2xl items-center px-4 py-4">
           <Link href={homeHref} className="flex h-8 items-center" aria-label="Accueil">
-            <span className="text-sm font-black tracking-tight text-foreground">{agencyName}</span>
+            <span className="text-sm font-black tracking-tight text-foreground">
+              {hasMark ? agencyName : "Accueil"}
+            </span>
           </Link>
         </div>
       </div>

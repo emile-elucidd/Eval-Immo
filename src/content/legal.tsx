@@ -2,6 +2,16 @@ import { Field, LegalList, Strong, type LegalSection } from "@/components/legal"
 import type { Landing } from "@/lib/tenant/types";
 
 /**
+ * Who publishes the site. On a client landing it is the agency, always named in
+ * the registry. On the apex it is the operator, and there is no honest name to
+ * print until `NEXT_PUBLIC_SITE_NAME` is set — so it renders as a loud
+ * placeholder, exactly like every other legal identifier left blank.
+ */
+function Editor({ name }: { name?: string }) {
+  return <Field value={name}>nom de l&apos;éditeur</Field>;
+}
+
+/**
  * The copy of the two legal pages.
  *
  * Everything that identifies the client — name, address, contact — comes from
@@ -43,7 +53,7 @@ export function legalNotice(landing: Landing): LegalSection[] {
       heading: "Éditeur du site",
       body: [
         <p key="p">
-          Le présent site est édité par <Strong>{agency.name}</Strong>,{" "}
+          Le présent site est édité par <Strong><Editor name={agency.name} /></Strong>,{" "}
           <Field value={legal.legalForm}>forme juridique</Field> au capital de{" "}
           <Field value={legal.capital}>montant</Field> euros, dont le siège social est situé{" "}
           {agency.address}.
@@ -96,7 +106,7 @@ export function legalNotice(landing: Landing): LegalSection[] {
       body: [
         <p key="p1">
           L&apos;ensemble des contenus du site — textes, éléments graphiques, logo, interface et
-          code — est la propriété exclusive de {agency.name} ou de ses partenaires et est protégé
+          code — est la propriété exclusive de <Editor name={agency.name} /> ou de ses partenaires et est protégé
           par le Code de la propriété intellectuelle. Toute reproduction, représentation,
           adaptation ou exploitation, totale ou partielle, sans autorisation écrite préalable, est
           interdite.
@@ -116,9 +126,9 @@ export function legalNotice(landing: Landing): LegalSection[] {
         <p key="p">
           L&apos;estimation proposée est une évaluation <Strong>indicative et automatique</Strong>,
           calculée à partir de ventes passées enregistrées dans la base DVF. Elle ne constitue ni
-          une expertise, ni un avis de valeur, ni un engagement de {agency.name} sur un prix de
+          une expertise, ni un avis de valeur, ni un engagement de <Editor name={agency.name} /> sur un prix de
           vente ou d&apos;achat. Seule la visite du bien par un conseiller permet une évaluation
-          ferme. {agency.name} ne saurait être tenue responsable d&apos;une décision prise sur le
+          ferme. <Editor name={agency.name} /> ne saurait être tenue responsable d&apos;une décision prise sur le
           seul fondement de la fourchette affichée.
         </p>,
       ],
@@ -127,7 +137,7 @@ export function legalNotice(landing: Landing): LegalSection[] {
       heading: "Responsabilité",
       body: [
         <p key="p">
-          {agency.name} s&apos;efforce d&apos;assurer l&apos;exactitude et la mise à jour des
+          <Editor name={agency.name} /> s&apos;efforce d&apos;assurer l&apos;exactitude et la mise à jour des
           informations diffusées, sans pouvoir le garantir. L&apos;éditeur ne peut être tenu
           responsable des erreurs ou omissions, d&apos;une indisponibilité temporaire du service,
           ni des dommages résultant de l&apos;utilisation du site ou de sites tiers vers lesquels
@@ -165,10 +175,10 @@ export function legalNotice(landing: Landing): LegalSection[] {
         <p key="p">
           Conformément aux articles L.612-1 et suivants du Code de la consommation, tout client
           ayant la qualité de consommateur peut recourir gratuitement au médiateur de la
-          consommation dont relève {agency.name} :{" "}
+          consommation dont relève <Editor name={agency.name} /> :{" "}
           <Field value={legal.mediator}>nom du médiateur, adresse postale, site internet</Field>. La
           saisine du médiateur doit être précédée d&apos;une réclamation écrite adressée à{" "}
-          {agency.name} restée sans réponse satisfaisante sous deux mois.
+          <Editor name={agency.name} /> restée sans réponse satisfaisante sous deux mois.
         </p>,
       ],
     },
@@ -186,7 +196,7 @@ export function legalNotice(landing: Landing): LegalSection[] {
       heading: "Contact",
       body: [
         <p key="p">
-          {agency.name}, {agency.address}. Téléphone : {agency.phone}. Courriel : {mailto}.
+          <Editor name={agency.name} />, {agency.address}. Téléphone : {agency.phone}. Courriel : {mailto}.
         </p>,
       ],
     },
@@ -205,7 +215,7 @@ function regulatedSection({ agency }: Landing): LegalSection {
     heading: "Activité réglementée",
     body: [
       <p key="p1">
-        {agency.name} exerce l&apos;activité de transaction sur immeubles et fonds de commerce,
+        <Editor name={agency.name} /> exerce l&apos;activité de transaction sur immeubles et fonds de commerce,
         encadrée par la loi n&nbsp;° 70-9 du 2&nbsp;janvier 1970 dite «&nbsp;loi Hoguet&nbsp;» et
         par son décret d&apos;application n&nbsp;° 72-678 du 20&nbsp;juillet 1972.
       </p>,
@@ -255,7 +265,7 @@ export function privacyPolicy(landing: Landing): LegalSection[] {
       heading: "Responsable du traitement",
       body: [
         <p key="p1">
-          Le responsable des traitements décrits ci-dessous est <Strong>{agency.name}</Strong>,{" "}
+          Le responsable des traitements décrits ci-dessous est <Strong><Editor name={agency.name} /></Strong>,{" "}
           {agency.address}.
         </p>,
         <p key="p2">
@@ -347,7 +357,7 @@ export function privacyPolicy(landing: Landing): LegalSection[] {
         <LegalList
           key="l"
           items={[
-            <>Les équipes habilitées de {agency.name}.</>,
+            <>Les équipes habilitées de <Editor name={agency.name} />.</>,
             <>
               Nos sous-traitants techniques, agissant sur nos seules instructions : notre hébergeur
               Vercel&nbsp;Inc. (hébergement et journalisation) et notre outil de gestion de la

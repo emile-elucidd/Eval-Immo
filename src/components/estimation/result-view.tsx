@@ -180,9 +180,9 @@ export function ResultView({
         </h2>
         <p className="text-base leading-relaxed text-muted-foreground">
           Ce prix est une pré-estimation donnée à titre indicatif. Dans le cadre d&apos;une mise en
-          vente, {agency.name} réalise une estimation complète de votre bien en prenant en compte de
-          nombreux facteurs supplémentaires (agencement, performance énergétique, vue, exposition,
-          état de la copropriété…).
+          vente, {agency.name || "un expert du secteur"} réalise une estimation complète de votre
+          bien en prenant en compte de nombreux facteurs supplémentaires (agencement, performance
+          énergétique, vue, exposition, état de la copropriété…).
         </p>
         <ButtonLink href={href("/rendez-vous")} size="lg" className="w-full font-bold sm:w-fit">
           <CalendarCheck className="h-5 w-5 shrink-0" aria-hidden />

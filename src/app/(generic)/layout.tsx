@@ -15,10 +15,14 @@ import { toPublicLanding } from "@/lib/tenant/landing";
 
 const { agency, city } = GENERIC_LANDING;
 
+// The apex has no brand unless the operator sets NEXT_PUBLIC_SITE_NAME; without
+// one the title carries no "| Agency" suffix rather than a made-up name.
+const brandSuffix = agency.name ? ` | ${agency.name}` : "";
+
 export const metadata: Metadata = {
   title: {
-    default: `Estimation immobilière dans votre commune | ${agency.name}`,
-    template: `%s | ${agency.name}`,
+    default: `Estimation immobilière dans votre commune${brandSuffix}`,
+    template: agency.name ? `%s | ${agency.name}` : "%s",
   },
   description:
     "Estimation immobilière gratuite dans votre commune, calculée sur les ventes réelles enregistrées par les notaires. Résultat en 2 minutes.",
@@ -32,11 +36,11 @@ export const metadata: Metadata = {
   ],
   robots: "index, follow",
   openGraph: {
-    title: `Estimation immobilière dans votre commune | ${agency.name}`,
+    title: `Estimation immobilière dans votre commune${brandSuffix}`,
     description: "Le prix de votre bien, à partir des ventes notariales.",
     type: "website",
     locale: "fr_FR",
-    siteName: agency.name,
+    siteName: agency.name || undefined,
     images: city.coverImage.startsWith("http") ? [city.coverImage] : undefined,
   },
 };
