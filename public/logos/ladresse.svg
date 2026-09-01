@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 60" fill="none">
+  <text x="0" y="36" font-family="Georgia, Times New Roman, serif" font-size="40" font-style="italic" fill="#111">l'Adresse</text>
+  <path d="M4 42 C60 54 130 52 186 40" stroke="#111" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <text x="78" y="56" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="0.4" fill="#111">l'immobilier coopératif</text>
+</svg>

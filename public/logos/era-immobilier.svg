@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" fill="none">
+  <path d="M60 2 L114 24 V32 L60 12 L6 32 V24 Z" fill="#111"/>
+  <text x="12" y="49" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="1" fill="#111">ERA</text>
+  <rect x="6" y="54" width="108" height="5" fill="#111"/>
+</svg>

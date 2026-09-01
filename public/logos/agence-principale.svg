@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268 60" fill="none">
+  <path d="M6 52 L24 8 L34 8 L52 52 L40 52 L36.5 42 L21.5 42 L18 52 Z M25 32 H33 L29 20 Z" fill="#111"/>
+  <path d="M56 52 V8 H76 C88 8 94 14.5 94 24 C94 33.5 88 40 76 40 H67 V52 Z M67 30 H75 C80 30 83 27.8 83 24 C83 20.2 80 18 75 18 H67 Z" fill="#111"/>
+  <text x="112" y="27" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="1.5" fill="#111">AGENCE</text>
+  <text x="112" y="52" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="1.5" fill="#111">PRINCIPALE</text>
+</svg>

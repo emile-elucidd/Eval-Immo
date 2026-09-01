@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <g fill="#111">
+    <path d="M28 58 V34 L16 24 L28 28 V18 L18 9 L29 14 L30 2 L31 14 L42 9 L32 18 V28 L44 24 L32 34 V58 Z"/>
+    <ellipse cx="18" cy="20" rx="6" ry="3.4" transform="rotate(-35 18 20)"/>
+    <ellipse cx="42" cy="20" rx="6" ry="3.4" transform="rotate(35 42 20)"/>
+    <ellipse cx="14" cy="32" rx="6" ry="3.4" transform="rotate(-20 14 32)"/>
+    <ellipse cx="46" cy="32" rx="6" ry="3.4" transform="rotate(20 46 32)"/>
+  </g>
+  <text x="60" y="43" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="1" fill="#111">LAFORÊT</text>
+</svg>

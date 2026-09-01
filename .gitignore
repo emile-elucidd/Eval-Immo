@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# leads captured locally by the estimation funnel
+.leads
 
 # vercel
 .vercel
