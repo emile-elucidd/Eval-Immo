@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { communeSales, isPublished } from "@/lib/dvf";
+import { communeSales, isPublished, neighbourhoodSales } from "@/lib/dvf";
 import {
   NoDataError,
   estimate,
@@ -27,7 +27,8 @@ import type { Agency, City } from "@/lib/tenant/types";
  * curious can skip past.
  *
  * Any address in France is priced — the public record covers the whole country
- * — so the only reason to refuse is a commune whose sales are not in it.
+ * — so the only reason to refuse is a commune whose sales are not in it, or a
+ * neighbourhood where nothing comparable has changed hands at all.
  *
  * The landing the visitor came from arrives in the payload, because Route
  * Handlers see neither the route's dynamic segments nor `next/root-params`. It
@@ -184,9 +185,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "notPublished" }, { status: 422 });
   }
 
+  const { address } = input;
+
   let result;
   try {
-    result = estimate(input, { sales: await communeSales(input.address.citycode) });
+    try {
+      result = estimate(input, { sales: await communeSales(address.citycode) });
+    } catch (error) {
+      if (!(error instanceof NoDataError)) throw error;
+      // The commune alone holds too few sales of this kind — a village with two
+      // flat sales in four years. Widen to the towns around it before giving up.
+      result = estimate(input, {
+        sales: await neighbourhoodSales(address.citycode, address.lat, address.lon),
+      });
+    }
   } catch (error) {
     if (error instanceof NoDataError) {
       return NextResponse.json({ error: "notEnoughData" }, { status: 422 });

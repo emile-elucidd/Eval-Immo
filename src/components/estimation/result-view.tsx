@@ -71,9 +71,9 @@ export function ResultView({
         <p className="text-base text-muted-foreground tabular-nums">
           soit {new Intl.NumberFormat("fr-FR").format(result.pricePerSqm)} €/m²
         </p>
-        <p className="mt-2 inline-flex items-center gap-2 rounded-md bg-card px-3 py-1.5 text-sm text-muted-foreground">
-          <ShieldCheck className="h-4 w-4 text-primary" aria-hidden />
-          {CONFIDENCE_LABEL[result.confidence]} · {result.sampleSize} ventes réelles dans un rayon de{" "}
+        <p className="mt-2 inline-flex max-w-full items-center gap-2 overflow-x-auto rounded-md bg-card px-3 py-1.5 text-sm whitespace-nowrap text-muted-foreground sm:text-base">
+          <ShieldCheck className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+          {CONFIDENCE_LABEL[result.confidence]} · {result.sampleSize} ventes sur un rayon de{" "}
           {result.radius < 1000
             ? `${result.radius} m`
             : `${(result.radius / 1000).toFixed(1).replace(".", ",")} km`}
@@ -184,10 +184,17 @@ export function ResultView({
           bien en prenant en compte de nombreux facteurs supplémentaires (agencement, performance
           énergétique, vue, exposition, état de la copropriété…).
         </p>
-        <ButtonLink href={href("/rendez-vous")} size="lg" className="w-full font-bold sm:w-fit">
-          <CalendarCheck className="h-5 w-5 shrink-0" aria-hidden />
-          Prendre rendez-vous — gratuit et sans engagement
-        </ButtonLink>
+        <div className="flex flex-col items-center gap-2 sm:items-start">
+          <ButtonLink
+            href={href("/rendez-vous")}
+            size="lg"
+            className="w-full font-bold sm:w-fit"
+          >
+            <CalendarCheck className="h-5 w-5 shrink-0" aria-hidden />
+            Prendre rendez-vous
+          </ButtonLink>
+          <span className="text-sm text-muted-foreground">Gratuit et sans engagement</span>
+        </div>
       </section>
     </div>
   );

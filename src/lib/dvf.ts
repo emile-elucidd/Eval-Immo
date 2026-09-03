@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { Sale } from "@/lib/estimation";
+import { distance, type Sale } from "@/lib/estimation";
 
 /**
  * Real settled sales, straight from the notarial record.
@@ -16,6 +16,9 @@ import type { Sale } from "@/lib/estimation";
  */
 
 const BASE_URL = "https://files.data.gouv.fr/geo-dvf/latest/csv";
+
+/** Where the communes of a department are, for the widened search below. */
+const GEO_URL = "https://geo.api.gouv.fr";
 
 /**
  * Alsace-Moselle and Mayotte keep their own land registry ("livre foncier"),
@@ -279,4 +282,109 @@ export async function communeSales(citycode: string, years: number = YEARS): Pro
     memory.delete(key);
     throw error;
   }
+}
+
+/**
+ * How many communes the widened search pulls, the address's own included.
+ *
+ * Sixteen rather than a handful because a village is usually ringed by other
+ * villages: from Menars the nearest town with a flat market — Blois — is only
+ * the fifteenth commune out. Loading more never skews the price, the model
+ * always keeping the closest sales and weighting them by distance; it only
+ * costs the fetches, which are small files behind a day-long cache.
+ */
+const NEIGHBOURS = 16;
+
+/** A commune reduced to what ranking it against an address needs. */
+type Commune = { code: string; lat: number; lon: number; radius: number };
+
+const departments = new Map<string, Promise<Commune[]>>();
+
+type GeoCommune = {
+  code: string;
+  centre?: { coordinates: [number, number] };
+  /** Hectares. */
+  surface?: number;
+};
+
+/**
+ * Where the communes of one department are, and how wide they are.
+ *
+ * `geo.api.gouv.fr` is the same public register the address autocomplete reads
+ * from, and the answer is a few dozen kilobytes of administrative geography
+ * that changes once a year: it is fetched once per department per instance. A
+ * failure is not fatal — the caller falls back to the commune on its own — so
+ * it resolves to an empty list and lets the next request try again.
+ */
+function departmentCommunes(department: string): Promise<Commune[]> {
+  const known = departments.get(department);
+  if (known) return known;
+
+  const pending = (async () => {
+    try {
+      const response = await fetch(
+        `${GEO_URL}/departements/${department}/communes?fields=code,centre,surface`,
+        { next: { revalidate: 604_800 }, signal: AbortSignal.timeout(8_000) },
+      );
+      if (!response.ok) throw new Error(`geo.api.gouv.fr responded ${response.status}`);
+      const body = (await response.json()) as GeoCommune[];
+
+      return body.flatMap((commune): Commune[] => {
+        const [lon, lat] = commune.centre?.coordinates ?? [];
+        if (!lat || !lon) return [];
+        // The radius of a disc of the same area, as a stand-in for the boundary.
+        const radius = Math.sqrt(((commune.surface ?? 0) * 10_000) / Math.PI);
+        return [{ code: commune.code, lat, lon, radius }];
+      });
+    } catch (error) {
+      console.error("[dvf] commune list failed", error);
+      departments.delete(department);
+      return [];
+    }
+  })();
+
+  departments.set(department, pending);
+  return pending;
+}
+
+/**
+ * Every usable sale in the commune *and in the towns around it*.
+ *
+ * A village of four thousand people records two flat sales in four years: no
+ * radius drawn inside its own borders will ever hold a sample, and the funnel
+ * used to answer "no result" to an address a professional would price without
+ * hesitating — by looking at the town next door. This widens to the nearest
+ * communes and leaves the arbitration to the model's own distance weighting: a
+ * sale 2.5 km away in Blois is a real comparable for an address on the edge of
+ * La Chaussée-Saint-Victor, and it is weighted as the 2.5 km it is.
+ *
+ * Neighbours are ranked on the distance to the commune's *edge* rather than to
+ * its centre — the disc above stands in for the boundary — because the centre
+ * of a large town can sit further away than a hamlet's while its nearest
+ * streets are much closer. Ranking on centres alone left Blois out.
+ *
+ * Only the address's own department is looked at, the commune list being
+ * fetched per department: an address a kilometre from a departmental boundary
+ * therefore looks the wrong way. That is still an answer rather than a refusal,
+ * and the fix would be to load the neighbouring departments' lists too.
+ */
+export async function neighbourhoodSales(
+  citycode: string,
+  lat: number,
+  lon: number,
+): Promise<Sale[]> {
+  const communes = await departmentCommunes(departmentOf(citycode));
+  const nearest = communes
+    .map((commune) => ({
+      code: commune.code,
+      gap: Math.max(0, distance(lat, lon, commune.lat, commune.lon) - commune.radius),
+    }))
+    .sort((a, b) => a.gap - b.gap)
+    .map((commune) => commune.code)
+    .filter((code) => code !== citycode);
+
+  // The address's own commune is loaded whatever the geography lookup said.
+  const codes = [citycode, ...nearest].slice(0, NEIGHBOURS);
+  const batches = await Promise.all(codes.map((code) => communeSales(code)));
+  return batches.flat();
 }

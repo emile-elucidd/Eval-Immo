@@ -55,7 +55,11 @@ enregistré au moment même où le prix est produit.
 `src/lib/estimation.ts` — pur, sans I/O, donc lisible et corrigible isolément.
 
 1. **Comparables** : les ventes de même nature autour de l'adresse, rayon élargi par paliers
-   (250 m → 5 km) jusqu'à obtenir un échantillon significatif.
+   (250 m → 5 km) jusqu'à obtenir un échantillon significatif. Si la commune n'en contient
+   pas assez — un village enregistre deux ventes d'appartement en quatre ans — la recherche
+   s'étend aux **16 communes les plus proches** (`neighbourhoodSales`, `src/lib/dvf.ts`) :
+   c'est ce que fait un agent, et la pondération par la distance replace chaque vente à sa
+   juste place. Le rayon réellement retenu est affiché au visiteur avec le résultat.
 2. **Réindexation** : chaque vente est repositionnée au marché d'aujourd'hui via la médiane
    annuelle de la commune.
 3. **Nettoyage** : les valeurs aberrantes (ventes entre proches, lots incomplets) sont écartées
@@ -67,7 +71,14 @@ enregistré au moment même où le prix est produit.
    fourchette dont la largeur suit la dispersion réelle du quartier.
 
 Les départements 57, 67, 68 et 976 relèvent du livre foncier : leurs ventes ne figurent pas dans
-DVF, le tunnel le dit explicitement plutôt que d'inventer un prix.
+DVF, le tunnel le dit explicitement plutôt que d'inventer un prix. Même chose si, commune et
+voisines réunies, rien de comparable n'a changé de main : le tunnel propose alors un
+rendez-vous sur place au lieu d'un chiffre approximatif.
+
+L'élargissement ne regarde que le département de l'adresse — la liste des communes est
+chargée département par département. Une adresse collée à une limite départementale regarde
+donc du mauvais côté ; elle obtient un prix quand même, simplement tiré de communes moins
+proches qu'elles ne pourraient l'être.
 
 ## Services externes
 
@@ -75,6 +86,7 @@ DVF, le tunnel le dit explicitement plutôt que d'inventer un prix.
 |---|---|---|
 | [Base Adresse Nationale](https://adresse.data.gouv.fr) | Autocomplétion et géocodage, via `/api/adresse` | aucune |
 | [DVF / Etalab](https://files.data.gouv.fr/geo-dvf/) | Ventes réelles, un CSV par commune et par an | aucune |
+| [API Découpage administratif](https://geo.api.gouv.fr) | Centre et superficie des communes d'un département, pour l'élargissement aux communes voisines | aucune |
 | Google Maps Embed | Carte de validation d'adresse | `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`, sinon repli OpenStreetMap |
 
 ## Multi-agence

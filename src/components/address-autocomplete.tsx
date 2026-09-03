@@ -98,7 +98,7 @@ export function AddressAutocomplete({
       <div
         className={cn(
           "flex w-full flex-col gap-2 rounded-md border border-transparent bg-white p-2 md:flex-row md:items-center md:gap-0 md:pl-5",
-          !action && "border-border bg-card p-0 pl-5",
+          !action && "flex-row items-center gap-0 border-border bg-card p-0 pr-2 pl-4 md:pr-0 md:pl-5",
         )}
       >
         <MapPin

@@ -46,7 +46,12 @@ export function FeatureRow({
             ))}
           </ul>
 
-          <ButtonLink href={feature.href} variant="outline" size="lg" className="mt-2 font-bold">
+          <ButtonLink
+            href={feature.href}
+            variant="outline"
+            size="lg"
+            className="mt-2 self-center font-bold lg:self-start"
+          >
             {feature.cta}
           </ButtonLink>
         </div>

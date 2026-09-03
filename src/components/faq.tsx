@@ -16,7 +16,7 @@ export function Faq({ items }: { items: FaqItem[] }) {
       <div className="mx-auto w-full max-w-6xl px-4">
         {/* Title column stays put while the questions scroll past it on desktop. */}
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
-          <div className="flex flex-col items-start gap-6 lg:w-1/3">
+          <div className="flex flex-col items-center gap-6 text-center lg:w-1/3 lg:items-start lg:text-left">
             <h2 className="text-2xl leading-tight font-black tracking-tight text-balance sm:text-3xl lg:text-4xl">
               Questions fréquentes
             </h2>

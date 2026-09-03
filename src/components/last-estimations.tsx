@@ -109,7 +109,7 @@ export function LastEstimations({
   const cards = real ? fromSales(sales, city) : fromSample(sample);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-12 lg:py-16">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 lg:py-16">
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div className="flex max-w-xl flex-col gap-3">
           <h2 className="text-2xl leading-tight font-black tracking-tight text-balance text-foreground sm:text-3xl lg:text-4xl">
@@ -127,18 +127,20 @@ export function LastEstimations({
           id="last-estimations-cta"
           variant="ghost"
           size="md"
-          className="w-fit shrink-0 border border-foreground bg-transparent px-4 font-bold text-foreground hover:bg-accent"
+          className="w-fit shrink-0 self-center border border-foreground bg-transparent px-4 font-bold text-foreground hover:bg-accent md:self-auto"
         >
           Estimer mon bien
           <ArrowRight className="h-4 w-4" />
         </ButtonLink>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map((card) => (
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3">
+        {cards.map((card, index) => (
           <article
             key={card.id}
-            className="flex items-stretch overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-foreground/30"
+            className={`items-stretch overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-foreground/30 ${
+              index < 3 ? "flex" : "hidden sm:flex"
+            }`}
           >
             <div className="flex min-w-0 flex-1 flex-col gap-3 p-5">
               <div className="min-w-0">
